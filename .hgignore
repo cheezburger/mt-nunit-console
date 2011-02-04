@@ -1,0 +1,5 @@
+glob:_ReSharper.*
+glob:*/bin/*
+glob:*.suo
+glob:*/obj/*
+glob:*.user

@@ -13,9 +13,9 @@ namespace Chzbgr.NUnit.Concurrent
 {
     public class ConsoleOptions : Chzbgr.NUnit.Console.ConsoleOptions
     {
-        [Option(Description = "The number of tests to run concurrently", Short = "dep", Value = 4)]
-        public int degreeofparallelism;
 
+        [Option(Description = "The number of tests to run concurrently", Short = "dep")]
+        public int degreeofparallelism;
 
         public ConsoleOptions(params string[] args)
             : base(args)

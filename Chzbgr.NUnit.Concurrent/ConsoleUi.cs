@@ -19,7 +19,7 @@ namespace Chzbgr.NUnit.Concurrent
     /// <summary>
     ///   Summary description for ConsoleUi.
     /// </summary>
-    public class ConsoleUi : Console.ConsoleUi
+    class ConsoleUi : Console.ConsoleUi
     {
         protected override int DoRun(Console.ConsoleOptions options, bool redirectOutput, bool redirectError, TestPackage package, TextWriter outWriter, TextWriter errorWriter, TestFilter testFilter, out TestResult result, EventCollector collector)
         {

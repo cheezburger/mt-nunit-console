@@ -4,12 +4,14 @@
 // obtain a copy of the license at http://nunit.org
 // ****************************************************************
 
-namespace NUnit.Util
+using System;
+using System.Collections;
+using System.IO;
+using NUnit.Core;
+using NUnit.Util;
+
+namespace Chzbgr.NUnit.Console
 {
-	using System;
-	using System.Collections;
-	using System.IO;
-	using NUnit.Core;
 
     #region AggregatingTestRunner
     /// <summary>
@@ -350,7 +352,7 @@ namespace NUnit.Util
 			// Ignore - we provide our own
 		}
 
-		void NUnit.Core.EventListener.RunFinished(TestResult result)
+		void EventListener.RunFinished(TestResult result)
 		{
             if (this.runInParallel)
             {

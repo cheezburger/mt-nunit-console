@@ -12,7 +12,7 @@ using System.Collections.Specialized;
 using NUnit.Core;
 using NUnit.Util;
 
-namespace NUnit.ConsoleRunner
+namespace Chzbgr.NUnit.Console
 {
 	/// <summary>
 	/// Summary description for EventCollector.
@@ -55,11 +55,11 @@ namespace NUnit.ConsoleRunner
 
 		public void WriteExceptions()
 		{
-			Console.WriteLine();
-			Console.WriteLine("Unhandled exceptions:");
+			System.Console.WriteLine();
+			System.Console.WriteLine("Unhandled exceptions:");
 			int index = 1;
 			foreach( string msg in unhandledExceptions )
-				Console.WriteLine( "{0}) {1}", index++, msg );
+				System.Console.WriteLine( "{0}) {1}", index++, msg );
 		}
 
 		public void RunStarted(string name, int testCount)
@@ -85,7 +85,7 @@ namespace NUnit.ConsoleRunner
 			        failureCount++;
     					
 			        if ( progress )
-				        Console.Write("F");
+				        System.Console.Write("F");
     					
 			        messages.Add( string.Format( "{0}) {1} :", failureCount, testResult.Test.TestName.FullName ) );
 			        messages.Add( testResult.Message.Trim( Environment.NewLine.ToCharArray() ) );
@@ -116,7 +116,7 @@ namespace NUnit.ConsoleRunner
     				testIgnoreCount++;
 					
 	    			if ( progress )
-		    			Console.Write("N");
+		    			System.Console.Write("N");
                     break;
 			}
 
@@ -131,7 +131,7 @@ namespace NUnit.ConsoleRunner
 				outWriter.WriteLine("***** {0}", currentTestName );
 				
 			if ( progress )
-				Console.Write(".");
+				System.Console.Write(".");
 		}
 
 		public void SuiteStarted(TestName testName)

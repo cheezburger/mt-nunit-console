@@ -4,14 +4,13 @@
 // copyright ownership at http://nunit.org.
 // ****************************************************************
 
-namespace NUnit.ConsoleRunner
-{
-	using System;
-	using Codeblast;
-	using NUnit.Util;
-    using NUnit.Core;
+using Codeblast;
+using NUnit.Core;
+using NUnit.Util;
 
-	public class ConsoleOptions : CommandLineOptions
+namespace Chzbgr.NUnit.Console
+{
+    public class ConsoleOptions : CommandLineOptions
 	{
 		[Option(Short="load", Description = "Test fixture or namespace to be loaded (Deprecated)")]
 		public string fixture;
@@ -107,20 +106,20 @@ namespace NUnit.ConsoleRunner
 
 		public override void Help()
 		{
-			Console.WriteLine();
-			Console.WriteLine( "NUNIT-CONSOLE [inputfiles] [options]" );
-			Console.WriteLine();
-			Console.WriteLine( "Runs a set of NUnit tests from the console." );
-			Console.WriteLine();
-			Console.WriteLine( "You may specify one or more assemblies or a single" );
-			Console.WriteLine( "project file of type .nunit." );
-			Console.WriteLine();
-			Console.WriteLine( "Options:" );
+			System.Console.WriteLine();
+			System.Console.WriteLine( "NUNIT-CONSOLE [inputfiles] [options]" );
+			System.Console.WriteLine();
+			System.Console.WriteLine( "Runs a set of NUnit tests from the console." );
+			System.Console.WriteLine();
+			System.Console.WriteLine( "You may specify one or more assemblies or a single" );
+			System.Console.WriteLine( "project file of type .nunit." );
+			System.Console.WriteLine();
+			System.Console.WriteLine( "Options:" );
 			base.Help();
-			Console.WriteLine();
-			Console.WriteLine( "Options that take values may use an equal sign, a colon" );
-			Console.WriteLine( "or a space to separate the option from its value." );
-			Console.WriteLine();
+			System.Console.WriteLine();
+			System.Console.WriteLine( "Options that take values may use an equal sign, a colon" );
+			System.Console.WriteLine( "or a space to separate the option from its value." );
+			System.Console.WriteLine();
 		}
 	}
 }

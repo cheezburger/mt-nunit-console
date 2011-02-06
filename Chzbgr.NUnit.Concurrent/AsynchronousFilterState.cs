@@ -25,5 +25,10 @@ namespace Chzbgr.NUnit.Concurrent
                 return p;
             }
         }
+
+        public override object InitializeLifetimeService()
+        {
+            return null;
+        }
     }
 }

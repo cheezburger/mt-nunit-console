@@ -58,6 +58,7 @@
   <ItemGroup>
     <Compile Include="AsynchronousFilter.cs" />
     <Compile Include="AsynchronousFilterState.cs" />
+    <Compile Include="ConsoleLoggingEventListener.cs" />
     <Compile Include="ConsoleOptions.cs" />
     <Compile Include="ConsoleUi.cs" />
     <Compile Include="ParallelTestRunner.cs" />

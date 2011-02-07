@@ -50,10 +50,11 @@ namespace Chzbgr.NUnit.Concurrent
 
             var testRunnerId = 0;
             {
-                var syncTestRunner = new DefaultTestRunnerFactory().MakeTestRunner(package);
-                var syncFilter = new AndFilter(testFilter, new SynchronousFilter());
-                result.AddResult(RunPartition(redirectOutput, redirectError, package, outWriter, errorWriter, syncFilter, syncTestRunner, collector));
-                testRunnerId = syncTestRunner.ID;
+                //var syncTestRunner = new DefaultTestRunnerFactory().MakeTestRunner(package);
+                //var syncFilter = new AndFilter(testFilter, new SynchronousFilter());
+                //var logger = new ConsoleLoggingEventListener(collector);
+                //result.AddResult(RunPartition(redirectOutput, redirectError, package, outWriter, errorWriter, syncFilter, syncTestRunner, logger));
+                //testRunnerId = syncTestRunner.ID;
             }
 
             var dep = 0;
@@ -77,7 +78,8 @@ namespace Chzbgr.NUnit.Concurrent
 
                 var retestTestRunner = new DefaultTestRunnerFactory().MakeTestRunner(package);
                 var retestFilter = new AndFilter(testFilter, failedTestFilter);
-                result.AddResult(RunPartition(redirectOutput, redirectError, package, outWriter, errorWriter, retestFilter, retestTestRunner, collector));
+                var logger = new ConsoleLoggingEventListener(collector);
+                var retestResults = RunPartition(redirectOutput, redirectError, package, outWriter, errorWriter, retestFilter, retestTestRunner, logger);
 
                 var newTests = Flatten(retestResults).ToDictionary(test => test.Result.FullName);
 
@@ -119,7 +121,7 @@ namespace Chzbgr.NUnit.Concurrent
             }
         }
 
-        private TestResult RunPartition(bool redirectOutput, bool redirectError, TestPackage package, TextWriter outWriter, TextWriter errorWriter, TestFilter testFilter, TestRunner testRunner, EventCollector collector)
+        private TestResult RunPartition(bool redirectOutput, bool redirectError, TestPackage package, TextWriter outWriter, TextWriter errorWriter, TestFilter testFilter, TestRunner testRunner, EventListener collector)
         {
             TestResult result;
             try
@@ -136,7 +138,7 @@ namespace Chzbgr.NUnit.Concurrent
             return result;
         }
 
-        private TestResult RunPartition(bool redirectOutput, bool redirectError, TestRunner testRunner, TextWriter outWriter, TextWriter errorWriter, TestFilter testFilter, EventCollector collector)
+        private TestResult RunPartition(bool redirectOutput, bool redirectError, TestRunner testRunner, TextWriter outWriter, TextWriter errorWriter, TestFilter testFilter, EventListener collector)
         {
             TestResult result = null;
             var savedDirectory = Environment.CurrentDirectory;

@@ -70,14 +70,26 @@ namespace Chzbgr.NUnit.Concurrent
 
             if (consoleOptions != null && consoleOptions.retestfailures)
             {
-                var failedTestFilter = new SimpleNameFilter(from test in Flatten(result)
-                                                            where test.IsFailure
-                                                            select test.FullName);
+                var failedTests = (from test in Flatten(result)
+                                   where test.Result.IsFailure
+                                   select test).ToList();
+                var failedTestFilter = new SimpleNameFilter(failedTests.Select(t => t.Result.FullName));
 
                 var retestTestRunner = new DefaultTestRunnerFactory().MakeTestRunner(package);
                 var retestFilter = new AndFilter(testFilter, failedTestFilter);
                 result.AddResult(RunPartition(redirectOutput, redirectError, package, outWriter, errorWriter, retestFilter, retestTestRunner, collector));
 
+                var newTests = Flatten(retestResults).ToDictionary(test => test.Result.FullName);
+
+                foreach (var failedTest in failedTests)
+                {
+                    var newTest = newTests[failedTest.Result.FullName];
+                    if (newTest.Result.IsSuccess)
+                    {
+                        failedTest.Parent.Results.Remove(failedTest.Result);
+                        failedTest.Parent.Results.Add(newTest.Result);
+                    }
+                }
             }
 
             timer.Stop();
@@ -85,19 +97,25 @@ namespace Chzbgr.NUnit.Concurrent
             return 0;
         }
 
-        public IEnumerable<TestResult> Flatten(TestResult src)
+        struct TestInfo
         {
-            var results = new Stack<TestResult>();
-            results.Push(src);
+            public TestResult Result { get; set; }
+            public TestResult Parent { get; set; }
+        }
+
+        static IEnumerable<TestInfo> Flatten(TestResult src)
+        {
+            var results = new Stack<TestInfo>();
+            results.Push(new TestInfo { Result = src });
 
             while (results.Count > 0)
             {
-                var result = results.Pop();
-                if (result.HasResults)
-                    foreach (TestResult child in result.Results)
-                        results.Push(child);
+                var test = results.Pop();
+                if (test.Result.HasResults)
+                    foreach (TestResult child in test.Result.Results)
+                        results.Push(new TestInfo { Parent = test.Result, Result = child });
                 else
-                    yield return result;
+                    yield return test;
             }
         }
 

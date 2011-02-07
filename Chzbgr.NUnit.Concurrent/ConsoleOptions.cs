@@ -17,6 +17,9 @@ namespace Chzbgr.NUnit.Concurrent
         [Option(Description = "The number of tests to run concurrently", Short = "dep")]
         public int degreeofparallelism;
 
+        [Option(Description = "When set this will trigger the runner to rerun failed tests")]
+        public bool retestfailures;
+
         public ConsoleOptions(params string[] args)
             : base(args)
         {

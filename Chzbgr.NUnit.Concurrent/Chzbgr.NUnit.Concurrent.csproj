@@ -63,6 +63,7 @@
     <Compile Include="ParallelTestRunner.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Runner.cs" />
+    <Compile Include="SimpleNameFilter.cs" />
     <Compile Include="SynchronousFilter.cs" />
     <Compile Include="SynchronousTestAttribute.cs" />
   </ItemGroup>

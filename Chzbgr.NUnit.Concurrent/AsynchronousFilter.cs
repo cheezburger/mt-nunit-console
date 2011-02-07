@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using NUnit.Core;
 
 namespace Chzbgr.NUnit.Concurrent
@@ -8,6 +9,7 @@ namespace Chzbgr.NUnit.Concurrent
     {
         private readonly int _partition;
         private readonly AsynchronousFilterState _state;
+        private readonly Dictionary<string, int> _partitionCache = new Dictionary<string, int>();
 
         public AsynchronousFilter(int partition, AsynchronousFilterState state)
         {
@@ -26,11 +28,21 @@ namespace Chzbgr.NUnit.Concurrent
             if (test == null)
                 return true;
 
-            var parition = _state.AssignPartition(test.TestName.UniqueName);
+            var parition = AssignPartition(test);
 
             return parition == _partition
                    && (0 == test.Method.GetCustomAttributes(typeof(SynchronousTestAttribute), true).Length
                        || 0 == test.Method.DeclaringType.GetCustomAttributes(typeof(SynchronousTestAttribute), true).Length);
+        }
+
+        private int AssignPartition(TestMethod test)
+        {
+            var name = test.TestName.UniqueName;
+            int partition;
+            if (_partitionCache.TryGetValue(name, out partition))
+                return partition;
+            _partitionCache[name] = partition = _state.AssignPartition(name);
+            return partition;
         }
     }
 }

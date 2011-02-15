@@ -1,4 +1,10 @@
-﻿using System;
+﻿// ****************************************************************
+// Copyright 2011, Cheezburger, Inc.
+// This is free software licensed under the NUnit license. You may
+// obtain a copy of the license at http://nunit.org
+// ****************************************************************
+using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Runtime.Serialization;
@@ -8,13 +14,13 @@ using NUnit.Core;
 namespace Chzbgr.NUnit.Concurrent
 {
     [Serializable]
-    class ConsoleLoggingEventListener : EventListener, ISerializable
+    internal class ConsoleLoggingEventListener : EventListener, ISerializable
     {
-        private readonly EventListener _wrapped;
-        private readonly ThreadLocal<StringWriter> _outWriter = new ThreadLocal<StringWriter>();
-        private readonly ThreadLocal<TextWriter> _oldOut = new ThreadLocal<TextWriter>();
-        private readonly ThreadLocal<TextWriter> _oldErr = new ThreadLocal<TextWriter>();
         private readonly FieldInfo _fieldInfo = typeof(TestResult).GetField("message", BindingFlags.Instance | BindingFlags.NonPublic);
+        private readonly ThreadLocal<TextWriter> _oldErr = new ThreadLocal<TextWriter>();
+        private readonly ThreadLocal<TextWriter> _oldOut = new ThreadLocal<TextWriter>();
+        private readonly ThreadLocal<StringWriter> _outWriter = new ThreadLocal<StringWriter>();
+        private readonly EventListener _wrapped;
 
 
         public ConsoleLoggingEventListener(EventListener wrapped)
@@ -24,13 +30,10 @@ namespace Chzbgr.NUnit.Concurrent
 
         public ConsoleLoggingEventListener(SerializationInfo info, StreamingContext context)
         {
-            _wrapped = (EventListener)info.GetValue("wrapped", typeof(EventListener));
+            _wrapped = (EventListener) info.GetValue("wrapped", typeof(EventListener));
         }
 
-        public void GetObjectData(SerializationInfo info, StreamingContext context)
-        {
-            info.AddValue("wrapped", _wrapped);
-        }
+        #region EventListener Members
 
         public void RunStarted(string name, int testCount)
         {
@@ -98,5 +101,16 @@ namespace Chzbgr.NUnit.Concurrent
         {
             _wrapped.TestOutput(testOutput);
         }
+
+        #endregion
+
+        #region ISerializable Members
+
+        public void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            info.AddValue("wrapped", _wrapped);
+        }
+
+        #endregion
     }
 }

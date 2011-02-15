@@ -1,22 +1,20 @@
-﻿using System;
+﻿// ****************************************************************
+// Copyright 2011, Cheezburger, Inc.
+// This is free software licensed under the NUnit license. You may
+// obtain a copy of the license at http://nunit.org
+// ****************************************************************
+using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Reflection;
-using System.Runtime.Serialization;
-using System.Text;
-using System.Threading;
+using Chzbgr.NUnit.Console;
 using NUnit.Core;
 using NUnit.Core.Filters;
-using NUnit.Util;
-using MultipleTestDomainRunner = Chzbgr.NUnit.Console.MultipleTestDomainRunner;
 
 namespace Chzbgr.NUnit.Concurrent
 {
-    class ParallelTestRunner : MultipleTestDomainRunner
+    internal class ParallelTestRunner : MultipleTestDomainRunner
     {
-        private readonly AsynchronousFilterState _state;
         private readonly int _degreeOfParallelism;
+        private readonly AsynchronousFilterState _state;
 
         public ParallelTestRunner(int degreeOfParallelism, AsynchronousFilterState state)
             : this(1, degreeOfParallelism, state)
@@ -32,9 +30,9 @@ namespace Chzbgr.NUnit.Concurrent
 
         protected override void LoadRunnders(TestPackage package, string targetAssemblyName, ref int nfound)
         {
-            for (int i = 0; i < _degreeOfParallelism; i++)
+            for (var i = 0; i < _degreeOfParallelism; i++)
             {
-                var testRunner = CreateRunner(base.ID * 100 + i + 1);
+                var testRunner = CreateRunner(base.ID*100 + i + 1);
                 testRunner.Load(package);
                 runners.Add(testRunner);
                 nfound++;
@@ -43,9 +41,9 @@ namespace Chzbgr.NUnit.Concurrent
 
         protected override TestResult InternalRun(ITestFilter filter, TestResult result)
         {
-            for (int i = 0; i < runners.Count; i++)
+            for (var i = 0; i < runners.Count; i++)
             {
-                var runner = (TestRunner)runners[i];
+                var runner = (TestRunner) runners[i];
                 runner.BeginRun(new ConsoleLoggingEventListener(this), new AndFilter(filter, new AsynchronousFilter(i, _state)));
             }
 

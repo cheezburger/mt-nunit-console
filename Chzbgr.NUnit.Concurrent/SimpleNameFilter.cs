@@ -1,7 +1,10 @@
-﻿using System;
+﻿// ****************************************************************
+// Copyright 2011, Cheezburger, Inc.
+// This is free software licensed under the NUnit license. You may
+// obtain a copy of the license at http://nunit.org
+// ****************************************************************
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using NUnit.Core;
 
 namespace Chzbgr.NUnit.Concurrent
@@ -18,7 +21,7 @@ namespace Chzbgr.NUnit.Concurrent
 
         public override bool Pass(ITest test)
         {
-            return this.Match(test);
+            return Match(test);
         }
 
         public override bool Match(ITest itest)

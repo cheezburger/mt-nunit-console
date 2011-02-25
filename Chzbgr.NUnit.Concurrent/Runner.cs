@@ -140,6 +140,7 @@ namespace Chzbgr.NUnit.Concurrent
             System.Console.WriteLine(string.Format("   OS Version: {0}", Environment.OSVersion));
             System.Console.WriteLine(string.Format("  CLR Version: {0} ( {1} )",
                 Environment.Version, framework.DisplayName));
+            System.Console.WriteLine(string.Format("      Runtime: {0} bit", Environment.Is64BitProcess ? "64" : "32"));
 
             System.Console.WriteLine();
         }

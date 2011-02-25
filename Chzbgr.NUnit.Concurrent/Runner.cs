@@ -113,7 +113,7 @@ namespace Chzbgr.NUnit.Concurrent
             var versionText = executingAssembly.GetName().Version.ToString();
 
             var productName = "NUnit";
-            var copyrightText = "Copyright (C) 2002-2009 Charlie Poole.\r\nCopyright (C) 2002-2004 James W. Newkirk, Michael C. Two, Alexei A. Vorontsov.\r\nCopyright (C) 2000-2002 Philip Craig.\r\nAll Rights Reserved.";
+            var copyrightText = "Copyright (C) 2002-2009 Charlie Poole.\r\nCopyright (C) 2002-2004 James W. Newkirk, Michael C. Two, Alexei A. Vorontsov.\r\nCopyright (C) 2000-2002 Philip Craig.\r\nCopyright (C) 2011 Cheezburger, Inc.\r\nAll Rights Reserved.";
 
             var objectAttrs = executingAssembly.GetCustomAttributes(typeof(AssemblyProductAttribute), false);
             if (objectAttrs.Length > 0)

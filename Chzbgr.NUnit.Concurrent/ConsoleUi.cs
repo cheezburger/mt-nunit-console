@@ -50,11 +50,11 @@ namespace Chzbgr.NUnit.Concurrent
 
             var testRunnerId = 0;
             {
-                //var syncTestRunner = new DefaultTestRunnerFactory().MakeTestRunner(package);
-                //var syncFilter = new AndFilter(testFilter, new SynchronousFilter());
-                //var logger = new ConsoleLoggingEventListener(collector);
-                //result.AddResult(RunPartition(redirectOutput, redirectError, package, outWriter, errorWriter, syncFilter, syncTestRunner, logger));
-                //testRunnerId = syncTestRunner.ID;
+                var syncTestRunner = new DefaultTestRunnerFactory().MakeTestRunner(package);
+                var syncFilter = new AndFilter(testFilter, new SynchronousFilter());
+                var logger = new ConsoleLoggingEventListener(collector);
+                result.AddResult(RunPartition(redirectOutput, redirectError, package, outWriter, errorWriter, syncFilter, syncTestRunner, logger));
+                testRunnerId = syncTestRunner.ID;
             }
 
             var dep = 0;

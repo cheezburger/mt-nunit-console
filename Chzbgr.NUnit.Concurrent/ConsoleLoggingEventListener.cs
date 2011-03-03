@@ -17,11 +17,8 @@ namespace Chzbgr.NUnit.Concurrent
     internal class ConsoleLoggingEventListener : EventListener, ISerializable
     {
         private readonly FieldInfo _fieldInfo = typeof(TestResult).GetField("message", BindingFlags.Instance | BindingFlags.NonPublic);
-        private readonly ThreadLocal<TextWriter> _oldErr = new ThreadLocal<TextWriter>();
-        private readonly ThreadLocal<TextWriter> _oldOut = new ThreadLocal<TextWriter>();
         private readonly ThreadLocal<StringWriter> _outWriter = new ThreadLocal<StringWriter>();
         private readonly EventListener _wrapped;
-
 
         public ConsoleLoggingEventListener(EventListener wrapped)
         {
@@ -30,7 +27,7 @@ namespace Chzbgr.NUnit.Concurrent
 
         public ConsoleLoggingEventListener(SerializationInfo info, StreamingContext context)
         {
-            _wrapped = (EventListener) info.GetValue("wrapped", typeof(EventListener));
+            _wrapped = (EventListener)info.GetValue("wrapped", typeof(EventListener));
         }
 
         #region EventListener Members
@@ -56,21 +53,19 @@ namespace Chzbgr.NUnit.Concurrent
 
             _outWriter.Value = new StringWriter();
 
-            _oldOut.Value = System.Console.Out;
-            _oldErr.Value = System.Console.Error;
-
-            System.Console.SetOut(_outWriter.Value);
-            System.Console.SetError(_outWriter.Value);
+            //TestExecutionContext.Save();
+            //TestExecutionContext.CurrentContext.Out = _outWriter.Value;
+            //TestExecutionContext.CurrentContext.Error = _outWriter.Value;
         }
 
         public void TestFinished(TestResult result)
         {
-            System.Console.SetOut(_oldOut.Value);
-            System.Console.SetError(_oldErr.Value);
+            //TestExecutionContext.Restore();
 
             _wrapped.TestFinished(result);
 
             var stringBuilder = _outWriter.Value.GetStringBuilder();
+            _outWriter.Value = null;
             if (stringBuilder.Length == 0)
                 return;
 
@@ -99,7 +94,10 @@ namespace Chzbgr.NUnit.Concurrent
 
         public void TestOutput(TestOutput testOutput)
         {
-            _wrapped.TestOutput(testOutput);
+            if (_outWriter.Value != null)
+                _outWriter.Value.Write(testOutput.Text);
+            else
+                _wrapped.TestOutput(testOutput);
         }
 
         #endregion

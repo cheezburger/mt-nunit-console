@@ -94,9 +94,43 @@ namespace Chzbgr.NUnit.Concurrent
                 }
             }
 
+            result = MergeResults(result.Test, (TestResult)result.Results[0], (TestResult)result.Results[1]);
+
             timer.Stop();
             result.Time = timer.ElapsedTicks / (double)TimeSpan.TicksPerSecond;
             return 0;
+        }
+
+        private TestResult MergeResults(ITest test, TestResult sync, TestResult async)
+        {
+            var results = new List<TestResult> { sync };
+            results.AddRange(from TestResult tr in async.Results
+                             select tr);
+            return MergeResults(test, results);
+        }
+
+        private TestResult MergeResults(ITest test, List<TestResult> results)
+        {
+            if (results.Count == 1)
+                return results[0];
+
+            var rv = new TestResult(test);
+
+            foreach (var item in from result in
+                                     (from r in results
+                                      where r.Results != null
+                                      from TestResult r2 in r.Results
+                                      where r2.Executed
+                                      select r2)
+                                 group result by result.Name into g
+                                 let mergeSet = g.ToList()
+                                 select MergeResults(mergeSet[0].Test, mergeSet))
+            {
+                rv.AddResult(item);
+                rv.Time += item.Time;
+            }
+
+            return rv;
         }
 
         struct TestInfo
